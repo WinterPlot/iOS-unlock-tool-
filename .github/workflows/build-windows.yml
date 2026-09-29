@@ -28,7 +28,11 @@ jobs:
           aqtversion: '==3.2.*'
 
       - name: Configure CMake
-        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+        run: >
+          cmake -S . -B build
+          -G "Visual Studio 17 2022"
+          -A x64
+          -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
         run: cmake --build build --config Release --parallel
@@ -36,7 +40,7 @@ jobs:
       - name: Verify executable
         shell: pwsh
         run: |
-          $exe = "build/gui/tr4mpass-gui.exe"
+          $exe = "build/gui/Release/tr4mpass-gui.exe"
           if (!(Test-Path $exe)) {
             Write-Error "Expected executable was not produced: $exe"
           }
@@ -46,7 +50,7 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path package | Out-Null
-          Copy-Item "build/gui/tr4mpass-gui.exe" "package/tr4mpass-gui.exe"
+          Copy-Item "build/gui/Release/tr4mpass-gui.exe" "package/tr4mpass-gui.exe"
           windeployqt --release --no-translations --compiler-runtime "package/tr4mpass-gui.exe"
 
       - name: Add project information
