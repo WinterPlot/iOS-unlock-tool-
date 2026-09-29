@@ -20,7 +20,6 @@ void Toast::show(QWidget *parent, const QString &title, const QString &message, 
     toast->adjustSize();
     const QPoint p = parent->mapToGlobal(QPoint(parent->width() - toast->width() - 22, parent->height() - toast->height() - 22));
     toast->move(p);
-    // Qualify QFrame::show() because Toast::show(...) hides QWidget::show()
     toast->QFrame::show();
     QTimer::singleShot(ms, toast, &QWidget::close);
     Q_UNUSED(type);
